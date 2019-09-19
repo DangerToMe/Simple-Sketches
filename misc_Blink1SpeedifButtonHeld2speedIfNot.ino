@@ -1,4 +1,4 @@
-// untested code
+//Compiles but NOT TESTED
 //Code to blink an LED at one speed if the
 //button is held pressed. And at a different
 //speed when the button is not held pressed
