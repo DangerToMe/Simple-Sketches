@@ -1,7 +1,6 @@
 //Blinks the onboard LED at a different random rate each second.
 //Written as a challenge to myself (albeit a small one)
 
-
 int LEDpin = 13; //tied to onboard LED
 int ledState = LOW;
 
