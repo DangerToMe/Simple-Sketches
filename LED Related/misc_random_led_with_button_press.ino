@@ -17,6 +17,7 @@ void setup() {
   for (int i = 0; i < arraySize; i++) {
     pinMode(ledPins[i], OUTPUT);
   }
+  pinMode(buttonPin, INPUT);
   randomSeed(analogRead(A0)); //change to an unused analog pin
   randomPin = ledPins[random(0, arraySize)];
   digitalWrite(randomPin, HIGH);
