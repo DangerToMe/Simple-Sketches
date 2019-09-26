@@ -1,7 +1,7 @@
 /*
     The Imperfect Storm
     Flashes an LED to simulate lightning
-    Currently Untested
+    >>> Currently Untested <<<
     Written for the Arduino Uno
     by DangerToMyself 
     September 25, 2019
