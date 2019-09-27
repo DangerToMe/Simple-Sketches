@@ -4,7 +4,7 @@
     Written for the Arduino Uno
     by DangerToMyself
     September 25, 2019
-    
+
     I am very pleased with the results this script produces as I'm still 
     learning this stuff. Feel free to copy, expand upon, modify, or use 
     as is. But there are probably better scripts with similar results. 
@@ -15,13 +15,15 @@
     control how bright the lights are based on the brightness of the sky.
 */
 
+// user changeable ints
 int ledPin = 5;
+int minFlashes = 3; //change to MINIMUM number of flashes
+int maxFlashes = 20; //change to MAXIMUM number of flashes
+
 int ledState = LOW;  //start with LED off
 int startLightning = 0;
 int strikeCount = 0;
 int strikeNum = 0;
-int minFlashes = 3; //change to MINIMUM number of flashes
-int maxFlashes = 20; //change to MAXIMUM number of flashes
 int pickedDigits[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 String myString;
@@ -35,21 +37,7 @@ void setup() {
   Serial.begin(57600);
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, ledState); //starts out LOW
-
-  // There are concerns about reading A0 as not really
-  // being all that random. I've added a bit of code
-  // that >"I believe"< helps add to the randomness.
-  randomSeed(analogRead(A0));
-  for (int i = 0; i < 10; i++) {
-    for (int x = 0; x < 4; x++) {
-      int myRandDigit  = random(0, 9);
-      myString = myString + myRandDigit;
-    }
-    pickedDigits[i] = myString.toInt();
-    myString = String("");
-  }
-  int mySeed = pickedDigits[random(0, 10)];
-  randomSeed(mySeed);
+  myRandom(); // Setup the random seed
   getFlashTiming(); // pre-select first flash length
   getStrikeTiming(); // pre-select first wait time until flash sequence
 }
@@ -92,7 +80,7 @@ void flashLightning() {
       digitalWrite(ledPin, ledState); // Write LED pin high or low
 
       //finished with sequence?
-      if (strikeCount == strikeNum) { // If finished 
+      if (strikeCount == strikeNum) { // If finished
         strikeCount = 0;
         startLightning = 0;
         digitalWrite(ledPin, LOW);
@@ -114,17 +102,30 @@ void getStrikeTiming() {
 
   // Get random number and multiply by 500UL
   // causing strikeDelay to be an unsigned long.
-  strikeDelay = 500UL * random(10, 100); 
-
-  // Remove or comment out for final use
-  // Just here to see when things re going to happen
-  //Serial.print("Next strike in ");
-  //Serial.print(strikeDelay);
-  //Serial.println(" milliseconds");
+  strikeDelay = 500UL * random(10, 100);
 }
 
 void getFlashTiming() {
   // Set flashDelay to a random number between 10 and 100
   // multiply by 1UL causing flashDelay to be an unsigned long.
   flashDelay = 1UL * random(10, 100);
+}
+
+void myRandom() {
+  // There are concerns about reading A0 as not really
+  // being all that random. I've added a bit of code
+  // that >"I believe"< helps add to the randomness. Is 
+  // it the perfect solution? No. But it works for my 
+  // needs.
+  randomSeed(analogRead(A0));
+  for (int i = 0; i < 10; i++) {
+    for (int x = 0; x < 4; x++) {
+      int myRandDigit  = random(0, 9);
+      myString = myString + myRandDigit;
+    }
+    pickedDigits[i] = myString.toInt();
+    myString = String("");
+  }
+  int mySeed = pickedDigits[random(0, 10)];
+  randomSeed(mySeed);
 }
